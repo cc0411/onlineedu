@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'organization',
+    'courses',
+
 ]
 
 #重载auth_user_model
