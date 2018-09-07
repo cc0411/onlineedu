@@ -18,7 +18,7 @@ class GlobalSettings(object):
     site_title = "在线教育demo"
     site_footer = "版权所有2018"
     # 收起菜单
-    menu_style = "accordion"
+    #menu_style = "accordion"
     # def get_site_menu(self):
     #     return (
     #         {'title': '机构管理', 'menus': (

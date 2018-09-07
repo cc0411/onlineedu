@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'courses',
     'operation',
     'xadmin',
-    'crispy_forms'
+    'crispy_forms',
+    'captcha',
+
 
 ]
 
@@ -128,3 +130,15 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
+
+
+#发送邮件配置
+EMAIL_HOST = "smtp.qq.com"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "123456@qq.com"
+EMAIL_HOST_PASSWORD ="123456"
+EMAIL_USE_TLS = True
+EMAIL_FROM = "123456@qq.com"

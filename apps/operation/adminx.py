@@ -2,7 +2,7 @@
 
 import xadmin
 
-from .models import UserAsk, UserCourse, UserMessage, CourseComments, UserFavorite
+from .models import UserAsk, UserCourse, UserMessage, CourseComents, Userfav
 
 
 # 用户表单我要学习后台管理器
@@ -44,5 +44,5 @@ class UserFavoriteAdmin(object):
 xadmin.site.register(UserAsk, UserAskAdmin)
 xadmin.site.register(UserCourse, UserCourseAdmin)
 xadmin.site.register(UserMessage, UserMessageAdmin)
-xadmin.site.register(CourseComments, CourseCommentsAdmin)
-xadmin.site.register(UserFavorite, UserFavoriteAdmin)
+xadmin.site.register(CourseComents, CourseCommentsAdmin)
+xadmin.site.register(Userfav, UserFavoriteAdmin)
