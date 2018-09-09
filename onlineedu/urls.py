@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import url,include
 #from django.contrib import admin
 import xadmin
+from django.views.static import serve
+from onlineedu.settings import MEDIA_ROOT
 from users.views import LoginView,index,RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView
 urlpatterns = [
     #url(r'^admin/', admin.site.urls),
@@ -28,6 +30,8 @@ urlpatterns = [
     url(r'^forget/$',ForgetPwdView.as_view(),name='forget_pwd'),
     url(r'^reset/(?P<active_code>.*)/$',ResetView.as_view(),name="reset_pwd"),
     url(r'^modify_pwd/$',ModifyPwdView.as_view(),name="modify_pwd"),
-
+    url(r'^org/',include('organization.urls',namespace='org'),),
+# 处理图片显示的url,使用Django自带serve,传入参数告诉它去哪个路径找，我们有配置好的路径MEDIAROOT
+    url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT }),
 
 ]

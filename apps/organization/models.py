@@ -17,12 +17,18 @@ class CityDict(models.Model):
 class CourseOrg(models.Model):
     name = models.CharField(max_length=30,verbose_name=u'机构名称')
     desc = models.TextField(verbose_name=u'描述')
+    category = models.SmallIntegerField(choices=((1,'培训机构'),(2,'高校'),(3,'个人')),default=1,verbose_name=u'机构类别')
     click_nums = models.SmallIntegerField(default=0,verbose_name=u'点击数')
     fav_nums = models.SmallIntegerField(default=0,verbose_name=u'收藏数')
     image = models.ImageField(verbose_name=u'封面图',max_length=100,upload_to='org/%Y/%m')
     address = models.CharField(max_length=150,verbose_name=u'机构地址')
     city = models.ForeignKey(CityDict,verbose_name='城市')
     add_time = models.DateTimeField(default=datetime.now)
+    # 当学生点击学习课程，找到所属机构，学习人数加1
+    students = models.IntegerField(default=0, verbose_name=u"学习人数")
+    # 当发布课程就加1
+    course_nums = models.IntegerField(default=0, verbose_name=u"课程数")
+
     def __str__(self):
         return self.name
     class Meta:

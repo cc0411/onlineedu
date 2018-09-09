@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'operation',
     'xadmin',
     'crispy_forms',
-    'captcha',
+
+    'captcha',  #验证码插件
+    'pure_pagination', # 分页插件
 
 
 ]
@@ -74,7 +76,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                #  添加图片处理器：为了在课程机构列表中前面加上MEDIA_URL
+                'django.template.context_processors.media',
             ],
+
         },
     },
 ]
@@ -133,7 +138,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+# 设置我们上传文件的路径
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #发送邮件配置
 EMAIL_HOST = "smtp.jcwit.com"
@@ -142,3 +150,11 @@ EMAIL_HOST_USER = "test@jcwit.com"
 EMAIL_HOST_PASSWORD = "abc1234,"
 EMAIL_USE_TLS= True
 EMAIL_FROM = "test@jcwit.com"
+
+
+#分页配置
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 10, #显示多少page页
+    'MARGIN_PAGES_DISPLAYED': 2,
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True, #页码不存在跳到首页
+}
