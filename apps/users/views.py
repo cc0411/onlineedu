@@ -57,15 +57,18 @@ class RegisterView(View):
             user.save()
             send_register_email(user_name,"register")
             # 跳转到登录页面
-            return render(request, "login.html", )
+            return render(request, "login.html",{'msg':'邮件已发送，请到邮箱查看'} )
         else:
             return render(request,"register.html",{"register_form":register_form})
 from users.models import EmailVerifyRecord
 from .forms import ActiveForm
+
 class ActiveUserView(View):
+    '''
+    用户激活
+    '''
     def get(self,request,active_code):
         all_record = EmailVerifyRecord.objects.filter(code=active_code)
-
         active_form =ActiveForm(request.GET)
         if all_record:
             for record  in all_record:
@@ -116,3 +119,8 @@ class ModifyPwdView(View):
             user.password = make_password(pwd1)
             user.save()
             return render(request,"login.html",{"msg":"密码修改成功，请重新登录"})
+        else:
+            email = request.POST.get("email", "")
+            return render(
+                request, "password_reset.html", {
+                    "email": email, "modifypwd_form":modifypwd_form})

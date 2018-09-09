@@ -136,9 +136,9 @@ STATICFILES_DIRS = (
 
 
 #发送邮件配置
-EMAIL_HOST = "smtp.qq.com"
+EMAIL_HOST = "smtp.jcwit.com"
 EMAIL_PORT = 25
-EMAIL_HOST_USER = "123456@qq.com"
-EMAIL_HOST_PASSWORD ="123456"
-EMAIL_USE_TLS = True
-EMAIL_FROM = "123456@qq.com"
+EMAIL_HOST_USER = "test@jcwit.com"
+EMAIL_HOST_PASSWORD = "abc1234,"
+EMAIL_USE_TLS= True
+EMAIL_FROM = "test@jcwit.com"
