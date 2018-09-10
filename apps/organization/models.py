@@ -17,6 +17,7 @@ class CityDict(models.Model):
 class CourseOrg(models.Model):
     name = models.CharField(max_length=30,verbose_name=u'机构名称')
     desc = models.TextField(verbose_name=u'描述')
+
     category = models.SmallIntegerField(choices=((1,'培训机构'),(2,'高校'),(3,'个人')),default=1,verbose_name=u'机构类别')
     click_nums = models.SmallIntegerField(default=0,verbose_name=u'点击数')
     fav_nums = models.SmallIntegerField(default=0,verbose_name=u'收藏数')
@@ -38,6 +39,11 @@ class CourseOrg(models.Model):
 
 class Teacher(models.Model):
     org = models.ForeignKey(CourseOrg,verbose_name=u'机构')
+    image = models.ImageField(
+        default='',
+        upload_to="teacher/%Y/%m",
+        verbose_name=u"头像",
+        max_length=100)
     name = models.CharField(max_length=20,verbose_name="姓名")
     work_years = models.SmallIntegerField(verbose_name=u'工作年限',)
     work_company = models.CharField(max_length=50,verbose_name=u'就职公司')

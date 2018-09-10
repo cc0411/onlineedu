@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import  datetime
-
+from organization.models import CourseOrg
 # Create your models here.
 
 
@@ -8,6 +8,7 @@ class Course(models.Model):
     name = models.CharField(max_length=30,verbose_name=u'课程名')
     desc = models.CharField(max_length=300,verbose_name=u'描述')
     detail = models.TextField(verbose_name=u'课程详情')
+    course_org = models.ForeignKey(CourseOrg, verbose_name=u"所属机构", null=True, blank=True)
     degree = models.SmallIntegerField(default=1,choices=((1,'初级'),(2,'中级'),(3,'高级')),verbose_name=u'课程难度')
     learn_time = models.IntegerField(default=0,verbose_name=u'学习时长/min')
     students = models.IntegerField(default=0,verbose_name=u'学习人数')
