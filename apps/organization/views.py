@@ -194,3 +194,58 @@ class AddFavView(View):
                 return HttpResponse('{"status":"success", "msg":"已收藏"}', content_type='application/json')
             else:
                 return HttpResponse('{"status":"fail", "msg":"收藏出错"}', content_type='application/json')
+
+
+class TeacherListView(View):
+    def get(self,request):
+        all_teacher = Teacher.objects.all()
+
+        rank_teachers = Teacher.objects.all().order_by("-fav_nums")[:5]
+        teacher_nums = all_teacher.count()
+        sort = request.GET.get("sort","")
+        if sort:
+            if sort =="hot":
+                all_teacher =all_teacher.order_by("-click_nums")
+
+        try:
+            page = request.GET.get('page',1)
+        except PageNotAnInteger:
+            page =1
+        p = Paginator(all_teacher,4,request=request)
+
+        teachers = p.page(page)
+
+        return render(request,"teachers-list.html",{'all_teachers':teachers,
+                                                    "teacher_nums":teacher_nums,
+                                                    "sort":sort,
+                                                    'rank_teachers':rank_teachers})
+
+
+class TeacherDetailView(View):
+    def get(self,request,teacher_id):
+        teacher = Teacher.objects.get(id = int(teacher_id))
+        all_course = teacher.course_set.all()
+
+        rank_teachers = Teacher.objects.all().order_by("-fav_nums")[:5]
+
+        has_fav_teacher = False
+        has_fav_org = False
+        if request.user.is_authenticated:
+            if Userfav.objects.filter(user=request.user,fav_id=teacher.id,fav_type=3):
+                has_fav_teacher = True
+            elif Userfav.objects.filter(user= request.user,fav_type=2,fav_id=teacher.id):
+                has_fav_org = True
+        return render(request,'teacher-detail.html',{'teacher':teacher,
+                                                     "all_course":all_course,
+                                                     "rank_teachers":rank_teachers,
+                                                     "has_fav_org":has_fav_org,
+                                                     "has_fav_teacher":has_fav_teacher})
+
+
+
+
+
+
+
+
+
