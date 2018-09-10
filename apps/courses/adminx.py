@@ -12,7 +12,7 @@ class CourseAdmin(object):
         'desc',
         'detail',
         'degree',
-        'learn_times',
+        'learn_time',
         'students']
     search_fields = ['name', 'desc', 'detail', 'degree', 'students']
     list_filter = [
@@ -20,7 +20,7 @@ class CourseAdmin(object):
         'desc',
         'detail',
         'degree',
-        'learn_times',
+        'learn_time',
         'students']
 
 

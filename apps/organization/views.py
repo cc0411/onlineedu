@@ -174,7 +174,7 @@ class AddFavView(View):
             return HttpResponse('{"status":"success", "msg":"收藏"}', content_type='application/json')
         else:
             user_fav = Userfav()
-            if int(type>0) and int(id)>0:
+            if int(type)>0  and int(id)>0:
                 user_fav.fav_id = int(id)
                 user_fav.fav_type = int(type)
                 user_fav.user = request.user
