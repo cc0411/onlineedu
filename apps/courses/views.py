@@ -6,10 +6,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from operation.models import Userfav,CourseComents, UserCourse
 from pure_pagination import  Paginator,EmptyPage,PageNotAnInteger
 from django.http import  HttpResponse
+from django.db.models import Q
 class CourseListView(View):
     '''课程列表'''
     def get(self,request):
         all_courses = Course.objects.all().order_by("-add_time")
+        # 搜索功能
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            # 在name字段进行操作,做like语句的操作。i代表不区分大小写
+            # or操作使用Q
+            all_course = all_courses.filter(Q(name__icontains=search_keywords) | Q(desc__icontains=search_keywords) | Q(
+                detail__icontains=search_keywords))
         sort = request.GET.get('sort', "")
         if sort:
             if sort == "students":
@@ -27,7 +35,8 @@ class CourseListView(View):
 
         return render(request,'course-list.html',{'all_courses':courses,
                                                   "sort": sort,
-                                                  "hot_courses": hot_courses})
+                                                  "hot_courses": hot_courses,
+                                                  "search_keywords": search_keywords})
 
 
 class CourseDetailView(View):

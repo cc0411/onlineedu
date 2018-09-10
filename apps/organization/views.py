@@ -5,6 +5,9 @@ from .models import CourseOrg,CityDict
 from pure_pagination import  Paginator,EmptyPage,PageNotAnInteger
 from django.http import HttpResponse
 from operation.models import Userfav
+from django.db.models import Q
+
+
 
 class OrgView(View):
     def get(self, request):
@@ -14,6 +17,13 @@ class OrgView(View):
         hot_orgs = all_orgs.order_by("-click_nums")[:3]
         #所有城市
         all_citys = CityDict.objects.all()
+        # 搜索功能
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            # 在name字段进行操作,做like语句的操作。i代表不区分大小写
+            # or操作使用Q
+            all_orgs = all_orgs.filter(Q(name__icontains=search_keywords) | Q(desc__icontains=search_keywords) | Q(
+                address__icontains=search_keywords))
         #按城市过滤
         city_id = request.GET.get("city",'')
         if city_id:
@@ -48,7 +58,8 @@ class OrgView(View):
                                                  'city_id':city_id,
                                                  'category':category,
                                                  'hot_orgs':hot_orgs,
-                                                 'sort':sort})
+                                                 'sort':sort,
+                                                 "search_keywords": search_keywords,})
 
 from .forms import UserAskForm
 class UserAskView(View):
@@ -199,9 +210,16 @@ class AddFavView(View):
 class TeacherListView(View):
     def get(self,request):
         all_teacher = Teacher.objects.all()
-
+        # 搜索功能
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            # 在name字段进行操作,做like语句的操作。i代表不区分大小写
+            # or操作使用Q
+            all_teacher = all_teacher.filter(
+                Q(name__icontains=search_keywords) | Q(work_company__icontains=search_keywords))
         rank_teachers = Teacher.objects.all().order_by("-fav_nums")[:5]
         teacher_nums = all_teacher.count()
+
         sort = request.GET.get("sort","")
         if sort:
             if sort =="hot":
@@ -218,7 +236,8 @@ class TeacherListView(View):
         return render(request,"teachers-list.html",{'all_teachers':teachers,
                                                     "teacher_nums":teacher_nums,
                                                     "sort":sort,
-                                                    'rank_teachers':rank_teachers})
+                                                    'rank_teachers':rank_teachers,
+                                                    "search_keywords": search_keywords,})
 
 
 class TeacherDetailView(View):
@@ -239,7 +258,8 @@ class TeacherDetailView(View):
                                                      "all_course":all_course,
                                                      "rank_teachers":rank_teachers,
                                                      "has_fav_org":has_fav_org,
-                                                     "has_fav_teacher":has_fav_teacher})
+                                                     "has_fav_teacher":has_fav_teacher,
+                                                     })
 
 
 
