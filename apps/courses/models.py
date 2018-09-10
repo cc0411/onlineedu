@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import  datetime
-from organization.models import CourseOrg
+from organization.models import CourseOrg,Teacher
 # Create your models here.
 
 
@@ -8,6 +8,7 @@ class Course(models.Model):
     name = models.CharField(max_length=30,verbose_name=u'课程名')
     desc = models.CharField(max_length=300,verbose_name=u'描述')
     detail = models.TextField(verbose_name=u'课程详情')
+    teacher = models.ForeignKey(Teacher,verbose_name=u"讲师", null=True, blank=True)
     course_org = models.ForeignKey(CourseOrg, verbose_name=u"所属机构", null=True, blank=True)
     degree = models.SmallIntegerField(default=1,choices=((1,'初级'),(2,'中级'),(3,'高级')),verbose_name=u'课程难度')
     learn_time = models.IntegerField(default=0,verbose_name=u'学习时长/min')
@@ -17,6 +18,8 @@ class Course(models.Model):
     image = models.ImageField(upload_to='course/%Y/%m',verbose_name=u'课程图',max_length=100)
     click_nums = models.IntegerField(default=0,verbose_name=u'点击数')
     tag = models.CharField(max_length=15, verbose_name=u"课程标签", default=u"")
+    you_need_know = models.CharField(max_length=300, default=u"一颗勤学的心是本课程必要前提", verbose_name=u"课程须知")
+    teacher_tell = models.CharField(max_length=300, default=u"按时交作业,不然叫家长", verbose_name=u"老师告诉你")
     add_time = models.DateTimeField(default=datetime.now,verbose_name=u'添加时间')
     class Meta:
         verbose_name = u'课程'
@@ -40,6 +43,7 @@ class Lesson(models.Model):
 class Video(models.Model):
     lesson = models.ForeignKey(Lesson,verbose_name=u'章节')
     name = models.CharField(max_length=20,verbose_name=u'视频名')
+    learn_times = models.IntegerField(default=0, verbose_name=u"学习时长(分钟数)")
     add_time = models.DateTimeField(default=datetime.now)
     class Meta:
         verbose_name = u'视频'
