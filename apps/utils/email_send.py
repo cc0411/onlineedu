@@ -53,3 +53,9 @@ def send_register_email(email,send_type="register"):
         msg.content_subtype ='html'
         send_status = msg.send()
         '''
+    elif send_type == "update_email":
+        email_title ="修改邮箱验证码"
+        email_body = "您的邮箱验证码为：{0}".format(code)
+        send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
+        if send_status:
+            pass

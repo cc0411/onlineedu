@@ -18,12 +18,13 @@ from django.conf.urls import url,include
 import xadmin
 from django.views.static import serve
 from onlineedu.settings import MEDIA_ROOT
-from users.views import LoginView,index,RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView
+from users.views import LoginView,index,RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView,LogoutView
 urlpatterns = [
     #url(r'^admin/', admin.site.urls),
     url(r'^xadmin/',xadmin.site.urls),
     url(r'^$',index,name='index'),
     url(r'^login/$',LoginView.as_view(),name='login'),
+    url(r'^logout/$',LogoutView.as_view(),name='logout'),
     url(r'^register/$',RegisterView.as_view(),name='register'),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^active/(?P<active_code>.*)/$',ActiveUserView.as_view(),name="user_active"),

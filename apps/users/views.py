@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
+from django.core.urlresolvers import reverse
 from django.views.generic.base import View
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 from .forms import LoginForm,RegisterForm
 from users.models import UserProfile
 def index(request):
@@ -188,8 +189,63 @@ class UpdatePwdView(LoginRequiredMixin,View):
                     modify_form.errors),
                 content_type='application/json')
 
+class SendEmailCodeView(LoginRequiredMixin,View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+    def get(self,request):
+        email = request.GET.get("email","")
+
+        if UserProfile.objects.filter(email=email):
+            return HttpResponse(
+                '{"email":"邮箱已经存在"}',
+                content_type='application/json')
+        send_register_email(email,"update_email")
+        return HttpResponse(
+            '{"status":"success"}',
+            content_type='application/json')
+
+class UpdateEmailView(LoginRequiredMixin,View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+    def post(self,request):
+        email = request.POST.get("email","")
+        code = request.POST.get("code","")
+        existed_records = EmailVerifyRecord.objects.filter(email=email,code=code,send_type="update_email")
+        if existed_records:
+            user = request.user
+            user.email = email
+            user.save()
+            return HttpResponse(
+                '{"status":"success"}',
+                content_type='application/json')
+        else:
+            return HttpResponse(
+                '{"email":"验证码无效"}',
+                content_type='application/json')
+
+class LogoutView(View):
+    def get(self, request):
+        # django自带的logout
+        logout(request)
+        # 重定向到首页,
+        return redirect(reverse("index"))
+
+from django.contrib.auth.backends import ModelBackend
+from django.db.models import Q
+# 实现用户名邮箱均可登录
+# 继承ModelBackend类，因为它有方法authenticate，可点进源码查看
 
 
-
-
-
+class CustomBackend(ModelBackend):
+    def authenticate(self, username=None, password=None, **kwargs):
+        try:
+            # 不希望用户存在两个，get只能有一个。两个是get失败的一种原因 Q为使用并集查询
+            user = UserProfile.objects.get(
+                Q(username=username) | Q(email=username))
+            # django的后台中密码加密：所以不能password==password
+            # UserProfile继承的AbstractUser中有def check_password(self,
+            # raw_password):
+            if user.check_password(password):
+                return user
+        except Exception as e:
+            return None
