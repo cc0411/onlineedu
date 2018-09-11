@@ -39,12 +39,12 @@
         <h1>机构教师</h1>
 
     </div>
-    {% for teahcer in all_teacher %}
+    {% for teacher in all_teacher %}
     <div class="diarys">
         <div class="module5 share company-diary-box" style="padding:10px 0;">
             <div class="left">
-                <img class="pic" src="{{ MEDIA_URL }}{{ teahcer.image }}"/>
-                <p>昵称：{{ teahcer.name }}</p>
+                <img class="pic" src="{{ MEDIA_URL }}{{ teacher.image }}"/>
+                <p>昵称：{{ teacher.name }}</p>
             </div>
             <div class="right">
                 <div class="top">

@@ -46,6 +46,7 @@ class Teacher(models.Model):
         max_length=100)
     name = models.CharField(max_length=20,verbose_name="姓名")
     work_years = models.SmallIntegerField(verbose_name=u'工作年限',)
+    age = models.SmallIntegerField(verbose_name=u'年龄',default=18 )
     work_company = models.CharField(max_length=50,verbose_name=u'就职公司')
     work_position = models.CharField(max_length=50,verbose_name=u'职位')
     points = models.CharField(max_length=100,verbose_name=u'教学特点')

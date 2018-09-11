@@ -120,7 +120,7 @@
                                 <img src='{{ MEDIA_URL}}{{ course.teacher.image }}' width='80' height='80' />
                             </a>
         <span class="tit">
-          <a href="/u/315464/courses?sort=publish" target="_blank">{{ course.teacher.name }}</a>
+          <a href="{% url 'org:teacher_detail' course.teacher.id  %}" target="_blank">{{ course.teacher.name }}</a>
         </span>
                             <span class="job">{{ course.teacher.work_position }}</span>
                         </div>
@@ -147,7 +147,7 @@
                                     <ul class="other-list">
                                         {%  for relate_course in relate_courses %}
                                         <li class="curr">
-                                            <a href="{% url 'courses:course_detail ' relate_courses.id %}" target="_blank">
+                                            <a href="{%  url 'courses:course_detail' relate_course.id %}" target="_blank">
                                                 <img src="{{ MEDIA_URL }}{{ relate_course.image}}" alt="{{ relate_course.name }}">
                                                 <span class="name autowrap">{{ relate_course.name }}</span>
                                             </a>
@@ -194,7 +194,7 @@
             data:{'course_id':{{ course.id }}, 'comments':comments},
             async: true,
             beforeSend:function(xhr, settings){
-                xhr.setRequestHeader("X-CSRFToken", "{% csrf_token %}");
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
             },
             success: function(data) {
                 if(data.status == 'fail'){

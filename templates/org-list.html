@@ -23,13 +23,13 @@
 				<li>
 					<h2>机构类别</h2>
 					<div class="cont">
-                        <a href="?city={{ city_id }}"><span class={% ifequal category "" %}"active2"{%  endifequal %}>全部</span></a>
+                        <a href="?city={{ city_id }}&keywords={{ search_keywords }}"><span class={% ifequal category "" %}"active2"{%  endifequal %}>全部</span></a>
 
-                            <a href="?ct=1&city={{ city.id }}"><span class="{% ifequal category "1" %}active2{% endifequal %}">培训机构</span></a>
+                            <a href="?ct=1&city={{ city.id }}&keywords={{ search_keywords }}"><span class="{% ifequal category "1" %}active2{% endifequal %}">培训机构</span></a>
 
-                            <a href="?ct=2&city={{ city.id }}"><span class="{% ifequal category "2" %}active2{% endifequal %}">高校</span></a>
+                            <a href="?ct=2&city={{ city.id }}&keywords={{ search_keywords }}"><span class="{% ifequal category "2" %}active2{% endifequal %}">高校</span></a>
 
-                            <a href="?ct=3&city={{ city.id }}"><span class="{% ifequal category "3" %}active2{% endifequal %}">个人</span></a>
+                            <a href="?ct=3&city={{ city.id }}&keywords={{ search_keywords }}"><span class="{% ifequal category "3" %}active2{% endifequal %}">个人</span></a>
 
 					</div>
 				</li>

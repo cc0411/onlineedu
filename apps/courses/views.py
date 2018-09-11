@@ -78,9 +78,9 @@ class CommentsView(LoginRequiredMixin,View):
 
         user_courses = UserCourse.objects.filter(course =course)
         user_ids = [user_course.user_id for user_course in user_courses]
-        all_user_courses = UserCourse.objects.filter(user_id_in=user_ids)
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
         course_ids = [user_course.course_id for user_course in all_user_courses]
-        relate_courses = Course.objects.filter(id_in=course_ids).order_by("-click_nums").exclude(id=course.id)[:4]
+        relate_courses = Course.objects.filter(id__in=course_ids).order_by("-click_nums").exclude(id=course.id)[:4]
 
         return render(request,'course-comment.html',{"course":course,
                                                      "all_resources":all_resources,
@@ -110,8 +110,9 @@ class CourseInfoView(LoginRequiredMixin,View):
 
         course_ids = [user_course.course_id  for user_course in all_user_courses]
         #获取学过的其他课程
-        relate_courses = Course.objects.filter(id_in= course_ids).order_by("-click_nums").exclude(id=course.id)[:4]
-        return render(request,'course-video.html',{'course':course,"all_resources":all_resources,
+        relate_courses = Course.objects.filter(id__in = course_ids).order_by("-click_nums").exclude(id=course.id)[:4]
+        return render(request,'course-video.html',{'course':course,
+                                                   "all_resources":all_resources,
                                                    "relate_courses":relate_courses})
 
 

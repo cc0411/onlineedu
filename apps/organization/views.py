@@ -82,7 +82,7 @@ class OrgHomeView(View):
         course_org = CourseOrg.objects.get(id= int(org_id))
         #获取机构关联的课程和老师
         all_courses = course_org.course_set.all()[:4]
-        all_teacher = course_org.course_set.all()[:2]
+        all_teacher = course_org.teacher_set.all()[:2]
         has_fav = False
         if request.user.is_authenticated:
             if Userfav.objects.filter(user= request.user,fav_id=course_org.id,fav_type=2):
@@ -209,27 +209,27 @@ class AddFavView(View):
 
 class TeacherListView(View):
     def get(self,request):
-        all_teacher = Teacher.objects.all()
+        all_teachers = Teacher.objects.all()
         # 搜索功能
         search_keywords = request.GET.get('keywords', '')
         if search_keywords:
             # 在name字段进行操作,做like语句的操作。i代表不区分大小写
             # or操作使用Q
-            all_teacher = all_teacher.filter(
+            all_teachers = all_teachers.filter(
                 Q(name__icontains=search_keywords) | Q(work_company__icontains=search_keywords))
         rank_teachers = Teacher.objects.all().order_by("-fav_nums")[:5]
-        teacher_nums = all_teacher.count()
+        teacher_nums = all_teachers.count()
 
         sort = request.GET.get("sort","")
         if sort:
             if sort =="hot":
-                all_teacher =all_teacher.order_by("-click_nums")
+                all_teachers =all_teachers.order_by("-click_nums")
 
         try:
             page = request.GET.get('page',1)
         except PageNotAnInteger:
             page =1
-        p = Paginator(all_teacher,4,request=request)
+        p = Paginator(all_teachers,4,request=request)
 
         teachers = p.page(page)
 

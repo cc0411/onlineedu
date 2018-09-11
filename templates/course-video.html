@@ -32,7 +32,7 @@
             <div style="height: 15px" class="path">
             </div>
             <div class="hd">
-                <h2 class="l">{{ course.name }}</h2>
+                <h2 class="l" style="padding-left: 30px">{{ course.name }}</h2>
             </div>
             <div class="statics clearfix">
                 <div class="static-item ">
@@ -64,9 +64,7 @@
                         <li><a id="commentOn" class="" href="{%  url 'courses:course_comments' course.id %}"><span>评论</span></a></li>
                     </ul>
                 </div>
-                <div id="notice" class="clearfix">
-                    <div class="l"> <strong>课程公告:</strong> <a  href="javascript:void(0)">Spring的文档以及相关的jar文件已上传</a> </div>
-                </div>
+
 
                 <div class="mod-chapters">
                     {%  for lesson in course.lesson_set.get_queryset %}
@@ -77,7 +75,7 @@
                         <ul class="video">
                             {%  for video  in lesson.video_set.get_queryset %}
                             <li>
-                                <a target="_blank" href='/video/3662' class="J-media-item studyvideo">{{ video.name }} ({{ video.learn_times }})
+                                <a target="_blank" href='{% url 'courses:video_play'  video.id%}' class="J-media-item studyvideo">{{ video.name }} ({{ video.learn_times }})
                                     <i class="study-state"></i>
                                 </a>
                             </li>
