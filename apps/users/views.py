@@ -293,3 +293,23 @@ class MyFavCourseView(LoginRequiredMixin,View):
             course = Course.objects.get(id=course_id)
             course_list.append(course)
         return render(request,'usercenter-fav-course.html',{"course_list":course_list})
+
+from pure_pagination import  Paginator,EmptyPage,PageNotAnInteger
+class MyMessageView(LoginRequiredMixin,View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+    def get(self,request):
+        all_messages = UserMessage.objects.filter(user=request.user.id)
+
+        all_unread_messages = UserMessage.objects.filter(user=request.user.id,has_read=False)
+
+        for unread_message in all_unread_messages:
+            unread_message.has_read = True
+            unread_message.save()
+        try:
+            page = request.GET.get("page",1)
+        except  PageNotAnInteger:
+            page =1
+        p = Paginator(all_messages,4,request=request)
+        messages = p.page(page)
+        return render(request,"usercenter-message.html",{"messages":messages})
