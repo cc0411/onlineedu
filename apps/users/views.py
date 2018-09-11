@@ -234,8 +234,6 @@ from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
 # 实现用户名邮箱均可登录
 # 继承ModelBackend类，因为它有方法authenticate，可点进源码查看
-
-
 class CustomBackend(ModelBackend):
     def authenticate(self, username=None, password=None, **kwargs):
         try:
@@ -249,3 +247,49 @@ class CustomBackend(ModelBackend):
                 return user
         except Exception as e:
             return None
+from operation.models import UserCourse,UserMessage,UserAsk,Userfav
+class MyCourseView(LoginRequiredMixin,View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+    def get(self,request):
+        user_courses = UserCourse.objects.filter(user= request.user)
+        return render(request,'usercenter-mycourse.html',{"user_courses":user_courses})
+
+
+from courses.models import CourseOrg,Teacher,Course
+class MyFavOrgView(LoginRequiredMixin,View):
+    login_url = '/login'
+    redirect_field_name = 'next'
+    def get(self,request):
+        org_list = []
+        fav_orgs = Userfav.objects.filter(user=request.user,fav_type=2)
+        for fav_org in fav_orgs:
+            org_id = fav_org.fav_id
+            org = CourseOrg.objects.get(id=org_id)
+            org_list.append(org)
+        return render(request,'usercenter-fav-org.html',{"org_list":org_list})
+
+class MyFavTeacherView(LoginRequiredMixin,View):
+    login_url = '/login'
+    redirect_field_name = 'next'
+    def get(self,request):
+        teacher_list =[]
+        fav_teachers = Userfav.objects.filter(user=request.user,fav_type=3)
+        for fav_teacher in  fav_teachers:
+            teacher_id = fav_teacher.fav_id
+            teacher = Teacher.objects.get(id =teacher_id)
+            teacher_list.append(teacher)
+        return render(request,'usercenter-fav-teacher.html',{"teacher_list":teacher_list})
+
+
+class MyFavCourseView(LoginRequiredMixin,View):
+    login_url = '/login'
+    redirect_field_name = 'next'
+    def get(self,request):
+        course_list = []
+        fav_courses = Userfav.objects.filter(user=request.user,fav_type=1)
+        for fav_course in fav_courses:
+            course_id = fav_course.fav_id
+            course = Course.objects.get(id=course_id)
+            course_list.append(course)
+        return render(request,'usercenter-fav-course.html',{"course_list":course_list})
