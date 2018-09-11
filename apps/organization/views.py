@@ -78,6 +78,9 @@ class OrgHomeView(View):
     def get(self,request,org_id):
 
         current_page = "home"
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        course_org.click_nums += 1
+        course_org.save()
         #根据id获取机构
         course_org = CourseOrg.objects.get(id= int(org_id))
         #获取机构关联的课程和老师
@@ -244,7 +247,8 @@ class TeacherDetailView(View):
     def get(self,request,teacher_id):
         teacher = Teacher.objects.get(id = int(teacher_id))
         all_course = teacher.course_set.all()
-
+        teacher.click_nums += 1
+        teacher.save()
         rank_teachers = Teacher.objects.all().order_by("-fav_nums")[:5]
 
         has_fav_teacher = False

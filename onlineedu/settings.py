@@ -143,6 +143,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+#如果关闭dug需要开启，否则404页面无法找到静态文件
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # 设置我们上传文件的路径
 
 MEDIA_URL = '/media/'
@@ -163,3 +165,4 @@ PAGINATION_SETTINGS = {
     'MARGIN_PAGES_DISPLAYED': 2,
     'SHOW_FIRST_PAGE_WHEN_INVALID': True, #页码不存在跳到首页
 }
+

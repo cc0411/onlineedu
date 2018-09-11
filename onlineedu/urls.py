@@ -18,11 +18,11 @@ from django.conf.urls import url,include
 import xadmin
 from django.views.static import serve
 from onlineedu.settings import MEDIA_ROOT
-from users.views import LoginView,index,RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView,LogoutView
+from users.views import LoginView,IndexView,RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView,LogoutView
 urlpatterns = [
     #url(r'^admin/', admin.site.urls),
     url(r'^xadmin/',xadmin.site.urls),
-    url(r'^$',index,name='index'),
+    url(r'^$',IndexView.as_view(),name='index'),
     url(r'^login/$',LoginView.as_view(),name='login'),
     url(r'^logout/$',LogoutView.as_view(),name='logout'),
     url(r'^register/$',RegisterView.as_view(),name='register'),
@@ -37,3 +37,6 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT }),
     url(r"^users/", include('users.urls', namespace="users")),
 ]
+# 全局404页面配置
+handler404 = 'users.views.page_not_found'
+handler500 = 'users.views.page_error'

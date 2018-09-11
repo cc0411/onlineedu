@@ -5,10 +5,21 @@ from django.core.urlresolvers import reverse
 from django.views.generic.base import View
 from django.contrib.auth import authenticate,login,logout
 from .forms import LoginForm,RegisterForm
-from users.models import UserProfile
-def index(request):
-    return  render(request,'index.html')
+from users.models import UserProfile,Banner
+class IndexView(View):
+    def get(self,request):
+        all_banner = Banner.objects.all().order_by('index')[:5]
 
+        courses = Course.objects.filter(is_banner=False)[:6]
+
+        banner_courses = Course.objects.filter(is_banner=True)[:3]
+
+        course_orgs = CourseOrg.objects.all()[:5]
+
+        return render(request,'index.html',{"all_banner":all_banner,
+                                            "courses":courses,
+                                            "banner_courses":banner_courses,
+                                            "course_orgs":course_orgs})
 class LoginView(View):
     # 直接调用get方法免去判断
     def get(self, request):
@@ -313,3 +324,19 @@ class MyMessageView(LoginRequiredMixin,View):
         p = Paginator(all_messages,4,request=request)
         messages = p.page(page)
         return render(request,"usercenter-message.html",{"messages":messages})
+
+
+def page_not_found(request):
+    # 全局404处理函数
+    from django.shortcuts import render_to_response
+    response = render_to_response('404.html', {})
+    response.status_code = 404
+    return response
+
+
+def page_error(request):
+    # 全局500处理函数
+    from django.shortcuts import render_to_response
+    response = render_to_response('500.html', {})
+    response.status_code = 500
+    return response
